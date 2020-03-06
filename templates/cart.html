@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% include 'nav.html' %}
+
+  <main class="container">
+    <h1 class="h3 my-4">Корзина</h1>
+    <div class="alert alert-warning" role="alert">Блюдо удалено из корзины</div>
+    <div class="row mt-5">
+
+      <div class="col-4">
+        <form action="/ordered/" method="post">
+        <h4 class="">Ваши данные</h4>
+        <div class=" md-4 order-md-1">
+          <div class="mt-3 mb-3">
+            {{ form.csrf_token }}
+            {% for err in form.name.errors %}
+              <p class="alert-warning">{{ err }}</p>
+            {% endfor %}
+            {{ form.name.label("Ваше имя") }}
+            {{ form.name(class = "font-weight-bold form-control") }} <!-- <input type="text" class="font-weight-bold form-control" id="name"> -->
+          </div>
+        </div>
+        <div class=" md-4 order-md-1">
+          <div class="mt-3 mb-3">
+            {% for err in form.address.errors %}
+              <p class="alert-warning">{{ err }}</p>
+            {% endfor %}
+            {{ form.name.label("Адрес") }}
+            {{ form.address(class = "font-weight-bold form-control") }} <!-- <input type="text" class="font-weight-bold form-control" id="name"> -->
+          </div>
+        </div>
+        <div class="md-4 form-label-group">
+          {% for err in form.mail.errors %}
+            <p class="alert-warning">{{ err }}</p>
+          {% endfor %}
+          {{ form.name.label("Электропочта") }}<!--  <label for="name">Электропочта</label> -->
+          {{ form.mail(class = "form-control") }} <!-- <input type="email" id="inputEmail" class="form-control" required autofocus> -->
+          <label for="inputEmail"></label>
+        </div>
+        <div class=" md-4 order-md-1">
+          <div class="mt-3 mb-3">
+            {% for err in form.phone.errors %}
+            <p class="alert-warning">{{ err }}</p>
+            {% endfor %}
+            {{ form.name.label("Телефон") }} <!-- <label for="name">Телефон</label> -->
+            {{ form.phone(class = "font-weight-bold form-control") }} <!-- <input type="text" class="font-weight-bold form-control" id="name"> -->
+          </div>
+        </div>
+        <input type="submit" class=" mt-3 mb-5 btn btn-danger" value="Оформить заказ">
+        </form>
+      </div>
+
+      <div class="col-1"></div>
+      <div class="col-7">
+        {% if session['cart']|length % 10 == 1 and session['cart']|length % 100 != 11 %}
+          <h4 class="mb-3 col-7 mb-5">{{ cart|length }} блюдо в корзине</h4>
+        {% elif session['cart']|length % 10 == 2 and session['cart']|length % 100 != 12 or session['cart']|length % 10 == 3 and session['cart']|length % 100 != 13 or session['cart']|length % 10 == 4 and session['cart']|length % 100 != 14 %}
+          <h4 class="mb-3 col-7 mb-5">{{ cart|length }} блюда в корзине</h4>
+        {% else %}
+          <h4 class="mb-3 col-7 mb-5">{{ cart|length }} блюд в корзине</h4>
+        {% endif %}
+        <table class="table">
+          <tbody>
+          {% for meal in meals %}
+            {% for meal_id in cart %}
+              {% if meal.id == meal_id %}
+                <tr>
+                  <th scope="row">{{ meal.title }}</th>
+                  <td></td>
+                  <td>1</td>
+                  <td>{{ meal.price }}</td>
+                  <td><a class="text-danger" href="/reset/{{ meal_id }}">Удалить</a></td>
+                </tr>
+              {% endif %}
+            {% endfor %}
+          {% endfor %}
+          </tbody>
+        </table>
+        <hr>
+        <p class="display-4 my-2 ">Итого: {{ summ() }} руб.</p>
+      </div>
+    </div>
+  </main>
+
+{% include 'footer.html' %}
+{% endblock %}
