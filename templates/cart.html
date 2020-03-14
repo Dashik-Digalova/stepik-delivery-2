@@ -6,11 +6,13 @@
 
   <main class="container">
     <h1 class="h3 my-4">Корзина</h1>
+
     <div class="alert alert-warning" role="alert">Блюдо удалено из корзины</div>
+
     <div class="row mt-5">
 
       <div class="col-4">
-        <form action="/ordered/" method="post">
+        <form action="/cart/" method="post">
         <h4 class="">Ваши данные</h4>
         <div class=" md-4 order-md-1">
           <div class="mt-3 mb-3">
@@ -32,11 +34,11 @@
           </div>
         </div>
         <div class="md-4 form-label-group">
-          {% for err in form.mail.errors %}
+          {% for err in form.user_mail.errors %}
             <p class="alert-warning">{{ err }}</p>
           {% endfor %}
-          {{ form.name.label("Электропочта") }}<!--  <label for="name">Электропочта</label> -->
-          {{ form.mail(class = "form-control") }} <!-- <input type="email" id="inputEmail" class="form-control" required autofocus> -->
+          {{ form.user_mail.label("Электропочта") }}<!--  <label for="name">Электропочта</label> -->
+          {{ form.user_mail(class = "form-control") }} <!-- <input type="email" id="inputEmail" class="form-control" required autofocus> -->
           <label for="inputEmail"></label>
         </div>
         <div class=" md-4 order-md-1">
@@ -48,6 +50,8 @@
             {{ form.phone(class = "font-weight-bold form-control") }} <!-- <input type="text" class="font-weight-bold form-control" id="name"> -->
           </div>
         </div>
+          <div class ="row"><input class="form-control" type="hidden" name="client_weekday" value="{{ date }}"></div>
+
         <input type="submit" class=" mt-3 mb-5 btn btn-danger" value="Оформить заказ">
         </form>
       </div>
@@ -63,7 +67,7 @@
         {% endif %}
         <table class="table">
           <tbody>
-          {% for meal in meals %}
+          {% for meal in meals_list %}
             {% for meal_id in cart %}
               {% if meal.id == meal_id %}
                 <tr>
@@ -71,7 +75,7 @@
                   <td></td>
                   <td>1</td>
                   <td>{{ meal.price }}</td>
-                  <td><a class="text-danger" href="/reset/{{ meal_id }}">Удалить</a></td>
+                  <td><a class="text-danger" href="/remove-from-cart/{{ meal_id }}">Удалить</a></td>
                 </tr>
               {% endif %}
             {% endfor %}

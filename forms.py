@@ -6,13 +6,13 @@ from wtforms.validators import InputRequired, Email, Length, DataRequired, Equal
 class CartForm(FlaskForm):
     name = StringField('name', [InputRequired(message="Введите что-нибудь"), Length(min=2, message="Поле должно содержать минимум два символа")])
     address = StringField('address', [InputRequired(message="Введите адрес")])
-    mail = StringField('mail', [Email(message="Неверные данные")])
+    user_mail = StringField('mail', [Email(message="Неверные данные")])
     phone = StringField('phone', [Length(min=7, message="Неверный телефон")])
 
 
 class AuthForm(FlaskForm):
-    email = StringField('email', [InputRequired(message="Введите что-нибудь")])
-    password = PasswordField('password')
+    mail = StringField('mail', [DataRequired(message="Введите что-нибудь")])
+    password = PasswordField('password', [DataRequired()])
 
 
 class UserForm(FlaskForm):
@@ -27,3 +27,5 @@ class UserForm(FlaskForm):
         ]
     )
     confirm_password = PasswordField("confirm_password")
+
+
